@@ -1,5 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
-import { auth, prefixFileUrlWithBackendUrl, request } from "@strapi/helper-plugin";
+import {
+  auth,
+  prefixFileUrlWithBackendUrl,
+  request,
+} from "@strapi/helper-plugin";
 import styled, { createGlobalStyle } from "styled-components";
 
 import { Box } from "@strapi/design-system/Box";
@@ -46,7 +50,9 @@ const Editor = ({ onChange, name, value, disabled }) => {
             return asset.formats[a].width - asset.formats[b].width;
           });
           keys.map((k) => {
-            let str = prefixFileUrlWithBackendUrl(asset.formats[k].url) + ` ${asset.formats[k].width}w,`;
+            let str =
+              prefixFileUrlWithBackendUrl(asset.formats[k].url) +
+              ` ${asset.formats[k].width}w,`;
             set = set + str;
           });
           const imgTag = `<img src="${asset.url}" alt="${asset.alt}" srcset="${set}"></img>`;
@@ -75,9 +81,15 @@ const Editor = ({ onChange, name, value, disabled }) => {
   useEffect(() => {
     // load the editor config
     (async () => {
-      const editor = await request(`/${pluginId}/config/editor`, { method: "GET" });
-      const plugin = await request(`/${pluginId}/config/plugin`, { method: "GET" });
-      const upload = await request(`/${pluginId}/config/uploadcfg`, { method: "GET" });
+      const editor = await request(`/${pluginId}/config/editor`, {
+        method: "GET",
+      });
+      const plugin = await request(`/${pluginId}/config/plugin`, {
+        method: "GET",
+      });
+      const upload = await request(`/${pluginId}/config/uploadcfg`, {
+        method: "GET",
+      });
 
       //read i18n locale
       const urlSearchParams = new URLSearchParams(window.location.search);
@@ -88,13 +100,16 @@ const Editor = ({ onChange, name, value, disabled }) => {
         //set locale language code to content
         let language = editor.language;
         if (languageContent) {
-          const countryCode = languageContent.split("-")[0]
+          const countryCode = languageContent.split("-")[0];
           if (countryCode && language)
             language = {
               content: language.content || countryCode,
-              ui: typeof language === "string" && language || language.ui || auth.getUserInfo().preferedLanguage,
-              textPartLanguage: language.textPartLanguage
-            }
+              ui:
+                (typeof language === "string" && language) ||
+                language.ui ||
+                auth.getUserInfo().preferedLanguage,
+              textPartLanguage: language.textPartLanguage,
+            };
         }
         setConfig({
           ...config,
@@ -114,17 +129,27 @@ const Editor = ({ onChange, name, value, disabled }) => {
 
         if (editor.language) {
           if (editor.language.ui) {
-            import(/* webpackMode: "eager" */ `./build/translations/${editor.language.ui}.js`).catch(() => null);
+            import(
+              /* webpackMode: "eager" */ `./build/translations/${editor.language.ui}.js`
+            ).catch(() => null);
           }
           if (editor.language.content) {
-            import(/* webpackMode: "eager" */ `./build/translations/${editor.language.content}.js`).catch(() => null);
+            import(
+              /* webpackMode: "eager" */ `./build/translations/${editor.language.content}.js`
+            ).catch(() => null);
           }
           if (typeof editor.language !== "object") {
-            import(/* webpackMode: "eager" */ `./build/translations/${editor.language}.js`).catch(() => null);
+            import(
+              /* webpackMode: "eager" */ `./build/translations/${editor.language}.js`
+            ).catch(() => null);
           }
         }
         if (!editor.language) {
-          import(/* webpackMode: "eager" */ `./build/translations/${auth.getUserInfo().preferedLanguage}.js`).catch(() => null);
+          import(
+            /* webpackMode: "eager" */ `./build/translations/${
+              auth.getUserInfo().preferedLanguage
+            }.js`
+          ).catch(() => null);
         }
       }
       if (plugin) {
@@ -132,8 +157,14 @@ const Editor = ({ onChange, name, value, disabled }) => {
           ...pluginCfg,
           ...plugin,
         });
-        if (plugin.setAttribute !== false && localStorage.getItem("STRAPI_THEME")) {
-          document.documentElement.setAttribute("data-theme", localStorage.getItem("STRAPI_THEME"));
+        if (
+          plugin.setAttribute !== false &&
+          localStorage.getItem("STRAPI_THEME")
+        ) {
+          document.documentElement.setAttribute(
+            "data-theme",
+            localStorage.getItem("STRAPI_THEME")
+          );
         }
       }
       if (upload) {
@@ -144,26 +175,32 @@ const Editor = ({ onChange, name, value, disabled }) => {
       }
     })();
 
-    return () => { };
+    return () => {};
   }, []);
 
   //###########################################################################################################
   const wordCounter = useRef(null);
   return (
     <Wrapper className="ck-editor__styled__container" ref={wordCounter}>
-      <EditorStyle custom={pluginCfg.styles} strapiTheme={pluginCfg.strapiTheme !== false ? theme : ""} />
+      <EditorStyle
+        custom={pluginCfg.styles}
+        strapiTheme={pluginCfg.strapiTheme !== false ? theme : ""}
+      />
       {config && (
         <CKEditor
           editor={CustomClassicEditor}
           disabled={disabled}
           data={value || ""}
           onReady={(editor) => {
-            editor.setData(value || "")
-            if(editor.config.get( 'removePlugins' ).includes("WordCount")===false){
-              const wordCountPlugin = editor.plugins.get( 'WordCount' );
-              const wordCountWrapper = wordCounter.current
-              wordCountWrapper.appendChild( wordCountPlugin.wordCountContainer );
+            editor.setData(value || "");
+            if (
+              editor.config.get("removePlugins").includes("WordCount") === false
+            ) {
+              const wordCountPlugin = editor.plugins.get("WordCount");
+              const wordCountWrapper = wordCounter.current;
+              wordCountWrapper.appendChild(wordCountPlugin.wordCountContainer);
             }
+            console.log(123);
           }}
           onChange={(event, editor) => {
             const data = editor.getData();
@@ -172,8 +209,12 @@ const Editor = ({ onChange, name, value, disabled }) => {
           config={config?.editor}
         />
       )}
-      <div style={{zIndex:5}}>
-        <MediaLib isOpen={mediaLibVisible} onChange={handleChangeAssets} onToggle={toggleMediaLib} />
+      <div style={{ zIndex: 5 }}>
+        <MediaLib
+          isOpen={mediaLibVisible}
+          onChange={handleChangeAssets}
+          onToggle={toggleMediaLib}
+        />
       </div>
     </Wrapper>
   );

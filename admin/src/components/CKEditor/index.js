@@ -225,11 +225,10 @@ const Editor = ({ onChange, name, value, disabled }) => {
             const addedImages = editor.model.document.differ
               .getChanges()
               .filter(
-                (change) => change.type === "insert" && change.name === "image"
+                (change) =>
+                  (change.type === "insert" && change.name === "image") ||
+                  change.name === "imageInline"
               );
-
-            console.log(editor.model.document.differ.getChanges());
-            console.log(4444, addedImages);
 
             addedImages.forEach((image) => {
               setImageDimensions(image.position.nodeAfter.getChild(0)._domNode);

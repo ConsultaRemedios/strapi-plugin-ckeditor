@@ -15,23 +15,29 @@ import pluginId from "../../pluginId";
 import styles from "./styles";
 import theme from "./theme";
 
-function setImageDimensions(imageElement) {
-  // Create a new image
-  var img = new Image();
+function setImageDimensions(html) {
+  const editableHtml = html;
 
-  // Set the src of the image to the src of the image element
-  img.src = imageElement.src;
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(editableHtml, "text/html");
 
-  // When the image has finished loading, get its width and height
-  img.onload = function () {
-    // Get the width and height of the image
-    var width = img.naturalWidth;
-    var height = img.naturalHeight;
+  const images = doc.querySelectorAll("img");
 
-    // Set the width and height attributes of the image element
-    imageElement.setAttribute("width", width);
-    imageElement.setAttribute("height", height);
-  };
+  images.forEach((image) => {
+    const img = new Image();
+
+    img.src = image.src;
+
+    img.onload = function () {
+      const width = img.naturalWidth;
+      const height = img.naturalHeight;
+
+      image.setAttribute("width", width);
+      image.setAttribute("height", height);
+    };
+  });
+
+  return doc.body.innerHTML;
 }
 
 const EditorStyle = createGlobalStyle`
@@ -236,11 +242,9 @@ const Editor = ({ onChange, name, value, disabled }) => {
             // addedImages.forEach((image) => {
             //   setImageDimensions(image.position.nodeAfter.getChild(0)._domNode);
             // });
-
-            console.log(editor.getData());
-
-            const data = editor.getData();
-            onChange({ target: { name, value: data } });
+            onChange({
+              target: { name, value: setImageDimensions(editor.getData()) },
+            });
           }}
           config={config?.editor}
         />

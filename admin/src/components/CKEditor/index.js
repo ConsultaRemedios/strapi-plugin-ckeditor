@@ -222,20 +222,22 @@ const Editor = ({ onChange, name, value, disabled }) => {
             console.log(123);
           }}
           onChange={(event, editor) => {
-            const addedImages = editor.model.document.differ
-              .getChanges()
-              .filter(
-                (change) =>
-                  change.type === "insert" &&
-                  (change.name === "image" || change.name === "imageInline")
-              );
+            // const addedImages = editor.model.document.differ
+            //   .getChanges()
+            //   .filter(
+            //     (change) =>
+            //       change.type === "insert" &&
+            //       (change.name === "image" || change.name === "imageInline")
+            //   );
 
-            console.log(777, editor.model.document.differ.getChanges());
-            console.log(addedImages);
+            // console.log(777, editor.model.document.differ.getChanges());
+            // console.log(addedImages);
 
-            addedImages.forEach((image) => {
-              setImageDimensions(image.position.nodeAfter.getChild(0)._domNode);
-            });
+            // addedImages.forEach((image) => {
+            //   setImageDimensions(image.position.nodeAfter.getChild(0)._domNode);
+            // });
+
+            console.log(editor.getData());
 
             const data = editor.getData();
             onChange({ target: { name, value: data } });

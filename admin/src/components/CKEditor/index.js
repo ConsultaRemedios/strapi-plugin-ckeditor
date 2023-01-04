@@ -226,8 +226,8 @@ const Editor = ({ onChange, name, value, disabled }) => {
               .getChanges()
               .filter(
                 (change) =>
-                  (change.type === "insert" && change.name === "image") ||
-                  change.name === "imageInline"
+                  change.type === "insert" &&
+                  (change.name === "image" || change.name === "imageInline")
               );
 
             console.log(addedImages);

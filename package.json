@@ -26,7 +26,8 @@
     "strapi-server.js"
   ],
   "dependencies": {
-    "@ckeditor/ckeditor5-react": "5.0.2"
+    "@ckeditor/ckeditor5-react": "5.0.2",
+    "jsdom": "^20.0.3"
   },
   "peerDependencies": {
     "@strapi/strapi": "^4.0.0"

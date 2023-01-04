@@ -14,60 +14,35 @@ import PropTypes from "prop-types";
 import pluginId from "../../pluginId";
 import styles from "./styles";
 import theme from "./theme";
+import { JSDOM } from "jsdom";
 
 function setImageDimensions(html) {
-  const images = html.match(/<img[^>]+>/g);
+  console.log(123123);
 
-  if (images) {
-    images.forEach((image) => {
-      const img = new Image();
-      img.src = image.match(/src="([^"]+)"/)[1];
+  const dom = new JSDOM(html);
 
-      img.onload = function () {
-        const width = img.naturalWidth;
-        const height = img.naturalHeight;
+  const doc = dom.window.document;
 
-        html = html.replace(
-          image,
-          `${image} width="${width}" height="${height}"`
-        );
-      };
-    });
-  }
+  const images = doc.querySelectorAll("img");
 
-  return html;
+  images.forEach((image) => {
+    const img = new Image();
+
+    img.src = image.src;
+
+    img.onload = function () {
+      const width = img.naturalWidth;
+      const height = img.naturalHeight;
+
+      image.setAttribute("width", width);
+      image.setAttribute("height", height);
+    };
+  });
+
+  console.log(doc.body.innerHTML);
+
+  return doc.body.innerHTML;
 }
-
-// function setImageDimensions(html) {
-//   const editableHtml = html;
-
-//   const parser = new DOMParser();
-//   const doc = parser.parseFromString(editableHtml, "text/html");
-
-//   const images = doc.querySelectorAll("img");
-
-//   console.log(3333333333);''
-
-//   console.log(images);
-
-//   images.forEach((image) => {
-//     const img = new Image();
-
-//     img.src = image.src;
-
-//     img.onload = function () {
-//       const width = img.naturalWidth;
-//       const height = img.naturalHeight;
-
-//       image.setAttribute("width", width);
-//       image.setAttribute("height", height);
-//     };
-//   });
-
-//   console.log(doc.body.innerHTML);
-
-//   return doc.body.innerHTML;
-// }
 
 const EditorStyle = createGlobalStyle`
 ${styles}

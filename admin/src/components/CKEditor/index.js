@@ -230,6 +230,7 @@ const Editor = ({ onChange, name, value, disabled }) => {
                   (change.name === "image" || change.name === "imageInline")
               );
 
+            console.log(777, editor.model.document.differ.getChanges());
             console.log(addedImages);
 
             addedImages.forEach((image) => {

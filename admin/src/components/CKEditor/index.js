@@ -16,8 +16,6 @@ import styles from "./styles";
 import theme from "./theme";
 
 function setImageDimensions(html) {
-  console.log(22222222222);
-
   const editableHtml = html;
 
   const parser = new DOMParser();
@@ -42,6 +40,8 @@ function setImageDimensions(html) {
       image.setAttribute("height", height);
     };
   });
+
+  console.log(doc.body.innerHTML);
 
   return doc.body.innerHTML;
 }

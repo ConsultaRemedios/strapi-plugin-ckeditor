@@ -15,6 +15,25 @@ import pluginId from "../../pluginId";
 import styles from "./styles";
 import theme from "./theme";
 
+function setImageDimensions(imageElement) {
+  // Create a new image
+  var img = new Image();
+
+  // Set the src of the image to the src of the image element
+  img.src = imageElement.src;
+
+  // When the image has finished loading, get its width and height
+  img.onload = function () {
+    // Get the width and height of the image
+    var width = img.naturalWidth;
+    var height = img.naturalHeight;
+
+    // Set the width and height attributes of the image element
+    imageElement.setAttribute("width", width);
+    imageElement.setAttribute("height", height);
+  };
+}
+
 const EditorStyle = createGlobalStyle`
 ${styles}
 ${({ strapiTheme }) => strapiTheme}
@@ -203,6 +222,7 @@ const Editor = ({ onChange, name, value, disabled }) => {
             console.log(123);
           }}
           onChange={(event, editor) => {
+            console.log(event);
             const data = editor.getData();
             onChange({ target: { name, value: data } });
           }}

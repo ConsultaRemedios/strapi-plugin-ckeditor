@@ -228,6 +228,8 @@ const Editor = ({ onChange, name, value, disabled }) => {
                 (change) => change.type === "insert" && change.name === "image"
               );
 
+            console.log(4444, addedImages);
+
             addedImages.forEach((image) => {
               setImageDimensions(image.position.nodeAfter.getChild(0)._domNode);
             });

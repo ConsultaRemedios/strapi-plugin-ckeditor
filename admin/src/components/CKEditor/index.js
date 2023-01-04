@@ -16,12 +16,16 @@ import styles from "./styles";
 import theme from "./theme";
 
 function setImageDimensions(html) {
+  console.log(22222222222);
+
   const editableHtml = html;
 
   const parser = new DOMParser();
   const doc = parser.parseFromString(editableHtml, "text/html");
 
   const images = doc.querySelectorAll("img");
+
+  console.log(3333333333);
 
   console.log(images);
 
@@ -244,6 +248,8 @@ const Editor = ({ onChange, name, value, disabled }) => {
             // addedImages.forEach((image) => {
             //   setImageDimensions(image.position.nodeAfter.getChild(0)._domNode);
             // });
+
+            console.log(1111111111);
             onChange({
               target: { name, value: setImageDimensions(editor.getData()) },
             });

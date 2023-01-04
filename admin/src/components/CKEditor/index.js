@@ -14,16 +14,17 @@ import PropTypes from "prop-types";
 import pluginId from "../../pluginId";
 import styles from "./styles";
 import theme from "./theme";
-import { JSDOM } from "jsdom";
 
 function setImageDimensions(html) {
-  console.log(123123);
-
-  const dom = new JSDOM(html);
-
-  const doc = dom.window.document;
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
 
   const images = doc.querySelectorAll("img");
+
+  console.log(3333333333);
+  ("");
+
+  console.log(images);
 
   images.forEach((image) => {
     const img = new Image();

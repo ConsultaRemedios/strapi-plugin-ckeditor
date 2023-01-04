@@ -35,6 +35,9 @@ function setImageDimensions(html) {
       const width = img.naturalWidth;
       const height = img.naturalHeight;
 
+      console.log("w", width);
+      console.log("h", height);
+
       image.setAttribute("width", width);
       image.setAttribute("height", height);
     };

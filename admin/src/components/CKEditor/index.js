@@ -228,6 +228,7 @@ const Editor = ({ onChange, name, value, disabled }) => {
                 (change) => change.type === "insert" && change.name === "image"
               );
 
+            console.log(editor.model.document.differ.getChanges());
             console.log(4444, addedImages);
 
             addedImages.forEach((image) => {

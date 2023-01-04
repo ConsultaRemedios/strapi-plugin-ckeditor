@@ -230,6 +230,8 @@ const Editor = ({ onChange, name, value, disabled }) => {
                   change.name === "imageInline"
               );
 
+            console.log(addedImages);
+
             addedImages.forEach((image) => {
               setImageDimensions(image.position.nodeAfter.getChild(0)._domNode);
             });

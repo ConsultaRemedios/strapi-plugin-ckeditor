@@ -222,7 +222,16 @@ const Editor = ({ onChange, name, value, disabled }) => {
             console.log(123);
           }}
           onChange={(event, editor) => {
-            console.log(event);
+            const addedImages = editor.model.document.differ
+              .getChanges()
+              .filter(
+                (change) => change.type === "insert" && change.name === "image"
+              );
+
+            addedImages.forEach((image) => {
+              setImageDimensions(image.position.nodeAfter.getChild(0)._domNode);
+            });
+
             const data = editor.getData();
             onChange({ target: { name, value: data } });
           }}

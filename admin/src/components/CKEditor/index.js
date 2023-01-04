@@ -16,35 +16,58 @@ import styles from "./styles";
 import theme from "./theme";
 
 function setImageDimensions(html) {
-  const editableHtml = html;
+  const images = html.match(/<img[^>]+>/g);
 
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(editableHtml, "text/html");
+  if (images) {
+    images.forEach((image) => {
+      const img = new Image();
+      img.src = image.match(/src="([^"]+)"/)[1];
 
-  const images = doc.querySelectorAll("img");
+      img.onload = function () {
+        const width = img.naturalWidth;
+        const height = img.naturalHeight;
 
-  console.log(3333333333);
+        html = html.replace(
+          image,
+          `${image} width="${width}" height="${height}"`
+        );
+      };
+    });
+  }
 
-  console.log(images);
-
-  images.forEach((image) => {
-    const img = new Image();
-
-    img.src = image.src;
-
-    img.onload = function () {
-      const width = img.naturalWidth;
-      const height = img.naturalHeight;
-
-      image.setAttribute("width", width);
-      image.setAttribute("height", height);
-    };
-  });
-
-  console.log(doc.body.innerHTML);
-
-  return doc.body.innerHTML;
+  return html;
 }
+
+// function setImageDimensions(html) {
+//   const editableHtml = html;
+
+//   const parser = new DOMParser();
+//   const doc = parser.parseFromString(editableHtml, "text/html");
+
+//   const images = doc.querySelectorAll("img");
+
+//   console.log(3333333333);''
+
+//   console.log(images);
+
+//   images.forEach((image) => {
+//     const img = new Image();
+
+//     img.src = image.src;
+
+//     img.onload = function () {
+//       const width = img.naturalWidth;
+//       const height = img.naturalHeight;
+
+//       image.setAttribute("width", width);
+//       image.setAttribute("height", height);
+//     };
+//   });
+
+//   console.log(doc.body.innerHTML);
+
+//   return doc.body.innerHTML;
+// }
 
 const EditorStyle = createGlobalStyle`
 ${styles}

@@ -23,6 +23,8 @@ function setImageDimensions(html) {
 
   const images = doc.querySelectorAll("img");
 
+  console.log(images);
+
   images.forEach((image) => {
     const img = new Image();
 

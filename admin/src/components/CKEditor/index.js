@@ -17,12 +17,6 @@ import theme from "./theme";
 
 const imageCache = {};
 
-async function asyncForEach(array, callback) {
-  for await (const element of array) {
-    await callback(element);
-  }
-}
-
 const getImageAttributes = (src) =>
   new Promise((resolve, reject) => {
     let img = new Image();
@@ -47,11 +41,15 @@ async function setImageDimensions(html) {
 
   const images = doc.querySelectorAll("img");
 
-  await asyncForEach(images, async (image) => {
-    const { width, height } = await getCachedImageAttributes(image.src);
+  const imageAttributesPromises = Array.from(images).map(async (image) => {
+    return getCachedImageAttributes(image.src);
+  });
 
-    image.setAttribute("width", width.width);
-    image.setAttribute("height", height.height);
+  const imageAttributes = await Promise.all(imageAttributesPromises);
+
+  images.forEach((image, index) => {
+    image.setAttribute("width", imageAttributes[index].width);
+    image.setAttribute("height", imageAttributes[index].height);
   });
 
   return doc.body.innerHTML;

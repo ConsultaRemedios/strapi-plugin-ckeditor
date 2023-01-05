@@ -15,35 +15,44 @@ import pluginId from "../../pluginId";
 import styles from "./styles";
 import theme from "./theme";
 
-function setImageDimensions(html) {
+const imageCache = {};
+
+async function asyncForEach(array, callback) {
+  for await (const element of array) {
+    await callback(element);
+  }
+}
+
+const getImageAttributes = (src) =>
+  new Promise((resolve, reject) => {
+    let img = new Image();
+    img.onload = () => resolve({ height: img.height, width: img.width });
+    img.onerror = reject;
+    img.src = src;
+  });
+
+const getCachedImageAttributes = (src) => {
+  if (src in imageCache) {
+    return Promise.resolve(imageCache[src]);
+  }
+  return getImageAttributes(src).then((attributes) => {
+    imageCache[src] = attributes;
+    return attributes;
+  });
+};
+
+async function setImageDimensions(html) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, "text/html");
 
   const images = doc.querySelectorAll("img");
 
-  console.log(3333333333);
-  ("");
+  await asyncForEach(images, async (image) => {
+    const { width, height } = await getCachedImageAttributes(image.src);
 
-  console.log(images);
-
-  images.forEach((image) => {
-    const img = new Image();
-
-    img.src = image.src;
-
-    img.onload = function () {
-      const width = img.naturalWidth;
-      const height = img.naturalHeight;
-
-      console.log("w", width);
-      console.log("h", height);
-
-      image.setAttribute("width", width);
-      image.setAttribute("height", height);
-    };
+    image.setAttribute("width", width.width);
+    image.setAttribute("height", height.height);
   });
-
-  console.log(doc.body.innerHTML);
 
   return doc.body.innerHTML;
 }
